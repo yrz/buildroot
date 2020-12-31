@@ -1,0 +1,26 @@
+diff -urN linux-2.6.39/include/linux/compiler-gcc8.h linux-2.6.39-patched/include/linux/compiler-gcc8.h
+--- linux-2.6.39/include/linux/compiler-gcc8.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-2.6.39-patched/include/linux/compiler-gcc8.h	2020-12-31 11:54:29.134457967 +0100
+@@ -0,0 +1 @@
++#include <linux/compiler-gcc4.h>
+diff -urN linux-2.6.39/include/linux/compiler-gcc9.h linux-2.6.39-patched/include/linux/compiler-gcc9.h
+--- linux-2.6.39/include/linux/compiler-gcc9.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-2.6.39-patched/include/linux/compiler-gcc9.h	2020-12-31 11:53:46.029443102 +0100
+@@ -0,0 +1 @@
++#include <linux/compiler-gcc4.h>
+diff -urN linux-2.6.39/Makefile linux-2.6.39-patched/Makefile
+--- linux-2.6.39/Makefile	2011-05-19 06:06:34.000000000 +0200
++++ linux-2.6.39-patched/Makefile	2020-12-31 12:00:04.878365574 +0100
+@@ -542,6 +542,12 @@
+ # Defaults to vmlinux, but the arch makefile usually adds further targets
+ all: vmlinux
+ 
++# force no-pie for distro compilers that enable pie by default
++KBUILD_CFLAGS += $(call cc-option, -fno-pie)
++KBUILD_CFLAGS += $(call cc-option, -no-pie)
++KBUILD_AFLAGS += $(call cc-option, -fno-pie)
++KBUILD_CPPFLAGS += $(call cc-option, -fno-pie)
++
+ ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+ KBUILD_CFLAGS	+= -Os
+ else
